@@ -17,10 +17,16 @@ You are a specialized skill that converts Korean conversation sessions into Engl
 
 1. **Find and read conversation file(s)**
    - If user provides a specific file path, read that file
-   - If user says "today", find all `.jsonl` files from today in `~/.claude/projects/-Users-heejujeon-Desktop-global-order/`
-   - If user provides a repo name, look for that repo's session directory
-   - If no path is given, ask the user for the file location or date
+   - If user provides a repo name + date (e.g., "global-order 2026-03-17"), filter `.jsonl` files by that date
+   - If user says "today", use today's date as the filter for the given repo (default: `global-order`)
+   - If only a repo name is given without a date, ask the user for the date
+   - If no path or repo is given, ask the user for the file location or date
    - Session files are in JSONL format (one JSON object per line)
+
+   **Date filtering (Step 1a)**
+   - Run: `ls -lt ~/.claude/projects/<repo-dir>/` and collect only lines matching the requested date (e.g., `Mar 17`)
+   - Extract `.jsonl` filenames from those lines (skip directories)
+   - This gives the **candidate file list** for the next step
 
 2. **Parse JSONL session files**
    - Each line is a JSON object
@@ -54,8 +60,11 @@ You are a specialized skill that converts Korean conversation sessions into Engl
      **English Question:**
      [Natural, recreated English question]
 
-     **Answer (Brief):**
-     [Brief excerpt from session answer, 2-3 sentences max]
+     **답변 (한국어):**
+     [세션 답변에서 발췌, 2-3문장]
+
+     **Answer (English):**
+     [Natural English translation of the answer excerpt, 2-3 sentences]
 
      ---
      ```
@@ -87,7 +96,10 @@ You are a specialized skill that converts Korean conversation sessions into Engl
 **English Question:**
 Can you create a documentation page on Confluence based on this troubleshooting document?
 
-**Answer (Brief):**
+**답변 (한국어):**
+먼저 트러블슈팅 문서를 읽고, 적절한 포맷과 구조로 Confluence 페이지를 생성하겠습니다.
+
+**Answer (English):**
 I'll read the troubleshooting document first, then create a Confluence page with proper formatting and structure.
 
 ---
@@ -100,7 +112,10 @@ I'll read the troubleshooting document first, then create a Confluence page with
 **English Question:**
 How can we improve state management in this component?
 
-**Answer (Brief):**
+**답변 (한국어):**
+복잡한 상태 로직에는 useReducer 사용을 고려하거나, 여러 컴포넌트가 접근해야 한다면 상태를 상위로 올리는 방법이 있습니다. 전역 상태에는 React Context를 도입할 수도 있습니다.
+
+**Answer (English):**
 Consider using useReducer for complex state logic, or lifting state up if multiple components need access. You could also implement React Context for global state.
 
 ---
@@ -131,11 +146,28 @@ Consider using useReducer for complex state logic, or lifting state up if multip
 
 ## Processing Multiple Files
 
-When user says "today" or provides multiple files:
-1. Find all matching files
-2. Process each file sequentially
-3. Combine all Q&A pairs chronologically
-4. Deduplicate similar questions
+When user says "today" or provides a date:
+1. Filter files by date → candidate file list
+2. **Apply file selection strategy** (see below)
+3. Process each selected file sequentially
+4. Combine all Q&A pairs chronologically
+5. Deduplicate similar questions
+
+## File Selection Strategy
+
+After building the candidate file list, apply the following:
+
+| User input | Behavior |
+|---|---|
+| `max N` (e.g., "max 5") | Pick the N largest files by size (more content = more Q&A) |
+| `random N` (e.g., "random 3") | Pick N files randomly from the candidate list |
+| `random` (no number) | Pick 3 files randomly (default) |
+| No selection hint | Cap at **10 files max**; if more than 10 exist, pick the 10 largest by size |
+
+**Default cap**: Always process at most **10 files** to avoid context overflow, unless the user explicitly says "all".
+
+When more than 10 candidates exist and user didn't specify, inform the user:
+> "Found {N} files for that date. Processing the 10 largest. Use `random N` or `max N` to change selection."
 
 ## Session File Locations
 
