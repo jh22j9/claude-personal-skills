@@ -1,6 +1,6 @@
 {
   "name": "session-to-english",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "한국어 세션을 영어 업무 용어/표현 학습 자료로 변환합니다.",
   "author": {
     "name": "heejujeon",
