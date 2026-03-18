@@ -146,18 +146,18 @@ Consider using useReducer for complex state logic, or lifting state up if multip
 
 ## Processing Files
 
-Always produce exactly **10 Q&A pairs**. Follow this process:
+Target **up to 10 Q&A pairs** — output as many as naturally available, never force-fill. Follow this process:
 
 1. Run `ls -lt <repo-dir>` → get candidate `.jsonl` files for the date
 2. **Time-bucket sampling**: divide files chronologically into `min(file count, 3)` buckets, pick the largest file from each bucket
 3. Read only the selected files (typically 2–3 files)
-4. Extract Q&A pairs from each file, distribute evenly to reach 10 total
+4. Extract work-related Q&A pairs from each file, distribute evenly up to 10 total
 5. Deduplicate similar questions
 
 **Examples:**
-- 15 files → 3 buckets → 3 files → ~3-4 Q&A each → 10 total
-- 2 files → 2 buckets → 2 files → 5 Q&A each → 10 total
-- 1 file → read that file → 10 Q&A from it
+- 15 files → 3 buckets → 3 files → up to ~3-4 Q&A each → up to 10 total
+- 2 files → 2 buckets → 2 files → up to 5 Q&A each → up to 10 total
+- 1 file with few Q&A → output however many are available
 
 ## Session File Locations
 
