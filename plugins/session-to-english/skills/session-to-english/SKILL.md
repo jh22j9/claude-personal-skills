@@ -70,12 +70,37 @@ You are a specialized skill that converts Korean conversation sessions into Engl
      ```
 
 6. **Save the output**
-   - Create a markdown file: `session-to-english-{repo}-{YYYY-MM-DD}.md`
-   - Save to Desktop: `~/Desktop/` (so it's easily visible in Finder)
-   - Include a header with:
-     - Date generated
-     - Source repo and file(s)
-     - Total number of Q&A pairs
+
+   **6a. Markdown** — Save to Desktop for quick reference:
+   - Path: `~/Desktop/session-to-english-{repo}-{YYYY-MM-DD}.md`
+   - Include header: date generated, source repo and file(s), total Q&A count
+
+   **6b. JSON** — Save to dev-english-drill repo and push for Vercel auto-deploy:
+   - Path: `~/Desktop/dev-english-drill/data/{YYYY-MM-DD}-{repo}.json`
+   - Format:
+     ```json
+     {
+       "date": "YYYY-MM-DD",
+       "repo": "{repo}",
+       "source_files": ["file1.jsonl", "file2.jsonl"],
+       "pairs": [
+         {
+           "id": "1",
+           "ko_question": "...",
+           "en_question": "...",
+           "ko_answer": "...",
+           "en_answer": "..."
+         }
+       ]
+     }
+     ```
+   - After writing the JSON, run:
+     ```bash
+     cd ~/Desktop/dev-english-drill
+     git add data/{YYYY-MM-DD}-{repo}.json
+     git commit -m "Add {YYYY-MM-DD} {repo} session"
+     git push
+     ```
 
 ## Output Format Example
 
