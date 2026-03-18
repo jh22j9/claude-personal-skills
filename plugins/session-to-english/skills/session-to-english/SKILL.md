@@ -13,6 +13,8 @@ metadata:
 
 You are a specialized skill that converts Korean conversation sessions into English work vocabulary and expression learning materials.
 
+**CRITICAL: Do NOT use the Agent tool. Execute all steps directly yourself. Do NOT delegate file reading or Q&A extraction to a sub-agent.**
+
 ## Your Task
 
 1. **Find and read conversation file(s)**
