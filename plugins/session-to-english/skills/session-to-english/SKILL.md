@@ -54,7 +54,7 @@ You are a specialized skill that converts Korean conversation sessions into Engl
      ```markdown
      ## Q{number}
 
-     **한국어 질문 (정제):**
+     **한국어 질문:**
      [Refined clear Korean question]
 
      **English Question:**
@@ -90,7 +90,7 @@ You are a specialized skill that converts Korean conversation sessions into Engl
 
 ## Q1
 
-**한국어 질문 (정제):**
+**한국어 질문:**
 트러블슈팅 문서를 기반으로 Confluence 위키 페이지에 문서를 작성해주세요.
 
 **English Question:**
@@ -106,7 +106,7 @@ I'll read the troubleshooting document first, then create a Confluence page with
 
 ## Q2
 
-**한국어 질문 (정제):**
+**한국어 질문:**
 이 컴포넌트에서 상태 관리를 어떻게 개선할 수 있을까요?
 
 **English Question:**
