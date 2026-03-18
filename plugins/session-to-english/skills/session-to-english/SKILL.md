@@ -71,11 +71,7 @@ You are a specialized skill that converts Korean conversation sessions into Engl
 
 6. **Save the output**
 
-   **6a. Markdown** — Save to Desktop for quick reference:
-   - Path: `~/Desktop/session-to-english-{repo}-{YYYY-MM-DD}.md`
-   - Include header: date generated, source repo and file(s), total Q&A count
-
-   **6b. JSON** — Save to dev-english-drill repo and push for Vercel auto-deploy:
+   Save JSON to dev-english-drill repo and push for Vercel auto-deploy:
    - Path: `~/Desktop/dev-english-drill/data/{YYYY-MM-DD}-{repo}.json`
    - Format:
      ```json
