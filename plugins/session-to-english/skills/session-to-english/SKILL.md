@@ -29,11 +29,13 @@ You are a specialized skill that converts Korean conversation sessions into Engl
    - This gives the **candidate file list** for the next step
 
 2. **Parse JSONL session files**
-   - Each line is a JSON object
-   - Look for objects with `"type": "user"` (questions) and `"type": "assistant"` (answers)
-   - Extract text from `message.content[].text` field
-   - Skip system messages, tool calls, and non-technical chatter
-   - Handle multi-part content arrays
+   - Instead of reading the entire file, extract only user/assistant lines with:
+     ```bash
+     grep -h '"type":"user"\|"type":"assistant"' file1.jsonl file2.jsonl
+     ```
+   - This skips tool calls and system messages, reducing data by ~90%
+   - Each extracted line is a JSON object — parse `message.content[].text` from it
+   - Ignore lines where `message.content` contains only tool_use or tool_result blocks
 
 3. **Extract Q&A pairs**
    - Identify questions (user messages) and answers (assistant responses)
