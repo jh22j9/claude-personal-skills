@@ -1,0 +1,25 @@
+{
+  "name": "personal-marketplace",
+  "owner": {
+    "name": "heejujeon",
+    "email": "",
+    "url": ""
+  },
+  "metadata": {
+    "description": "Personal Claude Code skills and plugins",
+    "version": "1.0.0",
+    "homepage": ""
+  },
+  "plugins": [
+    {
+      "name": "session-to-english",
+      "source": "./plugins/session-to-english",
+      "description": "한국어 세션을 영어 업무 용어/표현 학습 자료로 변환합니다.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": ["english", "learning", "session", "conversion"],
+      "tags": ["personal", "learning"],
+      "strict": false
+    }
+  ]
+}
