@@ -144,45 +144,20 @@ Consider using useReducer for complex state logic, or lifting state up if multip
 - `Write`: To save the output markdown file
 - `Grep`: To search for specific technical topics in session files
 
-## Processing Multiple Files
+## Processing Files
 
-When user says "today" or provides a date:
-1. Filter files by date → candidate file list
-2. **Apply time-bucket file sampling** (see below) → selected file list
-3. Read only the selected files and extract Q&A pairs
-4. Sample Q&A pairs evenly across files to reach target count
-5. Present final Q&A pairs chronologically
-6. Deduplicate similar questions
+Always produce exactly **10 Q&A pairs**. Follow this process:
 
-## File Sampling Strategy (Time-Bucket)
-
-To avoid reading all files, divide the candidate files into time buckets and pick one file per bucket:
-
-1. Run `ls -lt` to get files with timestamps
-2. Set bucket count = `min(number of candidate files, 3)` (default 3 buckets: morning / afternoon / evening)
-3. Divide the files chronologically into that many buckets
-4. From each bucket, pick the **largest file by size** (more content = more Q&A)
-5. Read only the selected files (typically 2–5 files)
+1. Run `ls -lt <repo-dir>` → get candidate `.jsonl` files for the date
+2. **Time-bucket sampling**: divide files chronologically into `min(file count, 3)` buckets, pick the largest file from each bucket
+3. Read only the selected files (typically 2–3 files)
+4. Extract Q&A pairs from each file, distribute evenly to reach 10 total
+5. Deduplicate similar questions
 
 **Examples:**
-- 15 files → 3 buckets → read 3 files → ~3-4 Q&A each → 10 total
-- 2 files → 2 buckets → read 2 files → ~5 Q&A each → 10 total
-- 1 file → read that file → pick 10 Q&A from it
-
-## Q&A Selection
-
-After reading the selected files, sample Q&A pairs **evenly across files** to reach the target count:
-
-| User input | Behavior |
-|---|---|
-| `random N` (e.g., "random 10") | Pick N Q&A pairs randomly, spread evenly across selected files |
-| `random` (no number) | Pick 10 Q&A pairs randomly (default) |
-| `max N` (e.g., "max 5") | Pick N most content-rich Q&A pairs |
-| No selection hint | Default to **10 Q&A pairs** |
-| `all` | Read all files, output all Q&A pairs |
-
-When more Q&A pairs are available than the target, inform the user:
-> "Extracted {N} Q&A pairs from {F} files. Showing {target}. Use `random N` or `max N` to change the count."
+- 15 files → 3 buckets → 3 files → ~3-4 Q&A each → 10 total
+- 2 files → 2 buckets → 2 files → 5 Q&A each → 10 total
+- 1 file → read that file → 10 Q&A from it
 
 ## Session File Locations
 
