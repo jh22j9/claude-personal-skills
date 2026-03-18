@@ -148,26 +148,26 @@ Consider using useReducer for complex state logic, or lifting state up if multip
 
 When user says "today" or provides a date:
 1. Filter files by date → candidate file list
-2. **Apply file selection strategy** (see below)
-3. Process each selected file sequentially
-4. Combine all Q&A pairs chronologically
+2. Read all candidate files and extract all Q&A pairs
+3. **Apply Q&A selection strategy** (see below)
+4. Present selected Q&A pairs chronologically
 5. Deduplicate similar questions
 
-## File Selection Strategy
+## Q&A Selection Strategy
 
-After building the candidate file list, apply the following:
+After extracting all Q&A pairs from the files, apply the following to decide which pairs to include in the output:
 
 | User input | Behavior |
 |---|---|
-| `max N` (e.g., "max 5") | Pick the N largest files by size (more content = more Q&A) |
-| `random N` (e.g., "random 3") | Pick N files randomly from the candidate list |
-| `random` (no number) | Pick 3 files randomly (default) |
-| No selection hint | Cap at **10 files max**; if more than 10 exist, pick the 10 largest by size |
+| `max N` (e.g., "max 5") | Pick the N most content-rich Q&A pairs |
+| `random N` (e.g., "random 10") | Pick N Q&A pairs randomly from the full pool |
+| `random` (no number) | Pick 10 Q&A pairs randomly (default) |
+| No selection hint | Cap at **20 Q&A pairs max**; pick the most varied/rich ones |
 
-**Default cap**: Always process at most **10 files** to avoid context overflow, unless the user explicitly says "all".
+**Default cap**: Always output at most **20 Q&A pairs** to keep the document readable, unless the user explicitly says "all".
 
-When more than 10 candidates exist and user didn't specify, inform the user:
-> "Found {N} files for that date. Processing the 10 largest. Use `random N` or `max N` to change selection."
+When the total Q&A pool exceeds the cap and user didn't specify, inform the user:
+> "Found {N} Q&A pairs for that date. Showing 20. Use `random N` or `max N` to change the count."
 
 ## Session File Locations
 
